@@ -1,6 +1,7 @@
 package com.fil.TicketBooking.exception;
 
 import com.fil.TicketBooking.errors.ResourceAlreadyExistsException;
+import com.fil.TicketBooking.errors.UserException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,23 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, Object> errorDetails = new HashMap<>();
+        errorDetails.put("status", HttpStatus.BAD_REQUEST.value());
+        errorDetails.put("error", "Validation Error");
+
+        Map<String, String> errors = new HashMap<>();
+        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+            errors.put(error.getField(), error.getDefaultMessage());
+        }
+        errorDetails.put("details", errors);
+        errorDetails.put("errorslen", ex.getBindingResult().getAllErrors().size());
+        return ResponseEntity.badRequest().body(errorDetails);
+    }
+
+
+    @ExceptionHandler(UserException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Map<String, Object>> handleUserExceptions(MethodArgumentNotValidException ex) {
         Map<String, Object> errorDetails = new HashMap<>();
         errorDetails.put("status", HttpStatus.BAD_REQUEST.value());
         errorDetails.put("error", "Validation Error");

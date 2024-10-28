@@ -32,10 +32,12 @@ public class User {
     @NotNull(message = "Password cannot be null")
     @Size(min = 8, message = "Password must be at least 8 characters long")
     private String password;
+    @NotNull(message= "Role cannot be null")
     @Enumerated(EnumType.STRING)
     private UserRole role;
     @Enumerated(EnumType.STRING)
     private UserStatus status;
+    @NotNull(message= "Address cannot be null")
     private String address;
     private Timestamp createdAt;
     private Timestamp updatedAt;
