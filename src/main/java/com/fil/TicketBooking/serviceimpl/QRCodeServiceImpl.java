@@ -1,8 +1,12 @@
 package com.fil.TicketBooking.serviceimpl;
+import com.fil.TicketBooking.enums.QRCodeStatus;
+import com.fil.TicketBooking.model.Payment;
 import com.fil.TicketBooking.model.QRCode;
+import com.fil.TicketBooking.model.TicketBooking;
 import com.fil.TicketBooking.repository.QRCodeRepository;
 import com.fil.TicketBooking.service.QRCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +23,15 @@ public class QRCodeServiceImpl implements QRCodeService {
     }
 
     @Override
-    public QRCode createQRCode(QRCode qrCode) {
-        return qrCodeRepository.save(qrCode);
+    public QRCode createQRCode(TicketBooking ticketBooking) {
+        String qrString = ticketBooking.getTotalMember()+ticketBooking.getUser().getName()+ticketBooking.getUser().getEmail()+ticketBooking.getTicketId();
+        QRCode qrCode = createQRCodeInstance();
+        qrCode.setStatus(QRCodeStatus.ACTIVE);
+        qrCode.setTicket(ticketBooking);
+        qrCode.setQrCode(qrString); //combination => tom+username+ticketbid+
+        qrCode.setNoOfPass(ticketBooking.getTotalMember());
+        qrCodeRepository.save(qrCode);
+        return qrCode;
     }
 
     @Override
@@ -46,6 +57,12 @@ public class QRCodeServiceImpl implements QRCodeService {
     @Override
     public List<QRCode> getAllQRCodes() {
         return qrCodeRepository.findAll();
+    }
+
+    @Lookup
+    protected QRCode createQRCodeInstance() {
+        // Spring will override this method to return a new QRCode instance
+        return null; // This will be overridden by Spring
     }
 }
 

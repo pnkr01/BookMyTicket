@@ -1,5 +1,6 @@
 package com.fil.TicketBooking.controller;
 
+import com.fil.TicketBooking.dto.TicketBookingDTO;
 import com.fil.TicketBooking.model.TicketBooking;
 import com.fil.TicketBooking.service.TicketBookingService;
 import com.fil.TicketBooking.serviceimpl.TicketBookingServiceImpl;
@@ -29,8 +30,8 @@ public class TicketBookingController {
     }
 
     @PostMapping("/create-ticket-booking")
-    public ResponseEntity<TicketBooking> createTicketBooking(@RequestBody TicketBooking ticketBooking) {
-        TicketBooking createdTicketBooking = ticketBookingService.bookEvent(ticketBooking);
+    public ResponseEntity<Object> createTicketBooking(@RequestBody TicketBooking ticketBooking) {
+        TicketBookingDTO createdTicketBooking = ticketBookingService.bookEvent(ticketBooking);
         return new ResponseEntity<>(createdTicketBooking, HttpStatus.CREATED);
     }
 

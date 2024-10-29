@@ -27,11 +27,11 @@ public class PaymentController {
         return new ResponseEntity<>(payment, HttpStatus.OK);
     }
 
-    @PostMapping("/create-payment")
-    public ResponseEntity<Payment> createPayment(@RequestBody Payment payment) {
-        Payment createdPayment = paymentService.createPayment(payment);
-        return new ResponseEntity<>(createdPayment, HttpStatus.CREATED);
-    }
+//    @PostMapping("/create-payment")
+//    public ResponseEntity<Payment> createPayment(@RequestBody Payment payment) {
+//        Payment createdPayment = paymentService.createPayment(payment);
+//        return new ResponseEntity<>(createdPayment, HttpStatus.CREATED);
+//    }
 
     @PutMapping("/update-payment-by-id/{id}")
     public ResponseEntity<Payment> updatePayment(@PathVariable Long id, @RequestBody Payment payment) {
