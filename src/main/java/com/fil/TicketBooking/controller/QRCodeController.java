@@ -28,8 +28,8 @@ public class QRCodeController {
         return new ResponseEntity<>(qrCode, HttpStatus.OK);
     }
 
-    @PostMapping("/create-qr-code-by-id")
-    public ResponseEntity<QRCode> createQRCode(@RequestBody TicketBooking qrCode) {
+    @PostMapping("/create-qr-code")
+    public ResponseEntity<QRCode> createQRCode(@RequestBody QRCode qrCode) {
         QRCode createdQRCode = qrCodeService.createQRCode(qrCode);
         return new ResponseEntity<>(createdQRCode, HttpStatus.CREATED);
     }

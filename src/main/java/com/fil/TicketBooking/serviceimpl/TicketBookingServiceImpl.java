@@ -29,10 +29,6 @@ public class TicketBookingServiceImpl implements TicketBookingService {
     private final EventRepository eventRepository;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private PaymentServiceImpl paymentServiceImpl;
-    @Autowired
-    private QRCodeServiceImpl qrCodeServiceImpl;
 
     @Autowired
     public TicketBookingServiceImpl(TicketBookingRepository ticketBookingRepository, EventRepository eventRepository) {
@@ -62,8 +58,6 @@ public class TicketBookingServiceImpl implements TicketBookingService {
                 userOpt.get().getTicketBookings().add(ticketBooking);
                 event.getTicketBookings().add(ticketBooking);
                 ticketBookingRepository.save(ticketBooking);
-                paymentServiceImpl.createPayment(ticketBooking);
-                qrCodeServiceImpl.createQRCode(ticketBooking);
                 return TicketBookingDTO.mapToDTO(ticketBooking);
             }else {
                 throw new RuntimeException("Not enough tickets available.");

@@ -23,13 +23,7 @@ public class QRCodeServiceImpl implements QRCodeService {
     }
 
     @Override
-    public QRCode createQRCode(TicketBooking ticketBooking) {
-        String qrString = ticketBooking.getTotalMember()+ticketBooking.getUser().getName()+ticketBooking.getUser().getEmail()+ticketBooking.getTicketId();
-        QRCode qrCode = createQRCodeInstance();
-        qrCode.setStatus(QRCodeStatus.ACTIVE);
-        qrCode.setTicket(ticketBooking);
-        qrCode.setQrCode(qrString); //combination => tom+username+ticketbid+
-        qrCode.setNoOfPass(ticketBooking.getTotalMember());
+    public QRCode createQRCode(QRCode qrCode) {
         qrCodeRepository.save(qrCode);
         return qrCode;
     }

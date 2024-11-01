@@ -1,8 +1,6 @@
 package com.fil.TicketBooking.serviceimpl;
-import com.fil.TicketBooking.enums.PaymentMethod;
-import com.fil.TicketBooking.enums.PaymentStatus;
+import com.fil.TicketBooking.model.Mail;
 import com.fil.TicketBooking.model.Payment;
-import com.fil.TicketBooking.model.TicketBooking;
 import com.fil.TicketBooking.repository.PaymentRepository;
 import com.fil.TicketBooking.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +9,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
+    @Autowired
+    private MailServiceImpl mailService;
+
+    @Autowired
+    private Mail mail;
+
+    @Autowired
     private final PaymentRepository paymentRepository;
 
     @Autowired
@@ -24,15 +28,36 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Payment createPayment(TicketBooking ticketBooking) {
-        //send to payment db
-        Payment payment = createPaymentInstance();
-        payment.setTicketBooking(ticketBooking);
-        payment.setPaymentMethod(PaymentMethod.UPI);
-        payment.setPaymentStatus(PaymentStatus.PENDING);
-        payment.setAmount(ticketBooking.getTotalPrice()*ticketBooking.getTotalMember());
-        payment.setTransactionId(Long.valueOf(UUID.randomUUID().toString()));
-        return paymentRepository.save(payment);
+    public Payment createPayment(Payment payment) {
+        //call raxorpay get the payment then save it.
+        Payment save = paymentRepository.save(payment);
+
+
+        //here save will be coming from razorpay if its success then generate qr
+//        //otherwise set the payment status coming from db.
+//        if (save.getPaymentStatus() == PaymentStatus.SUCCESS) {
+//            //call qr controller
+//            //sent email to user.
+//
+//            sendEmailToThisUser(payment);
+//        }else{
+//            return save; //if status equals
+//        }
+        return save;
+
+        //TODO
+    }
+
+    @Override
+    public void sendEmail(String email) {
+        mail.setMailFrom("infokumar66@gmail.com");
+        mail.setMailTo(email);
+        mail.setMailSubject("Ticket Booking Confirmation");
+        mail.setMailSubject("Payment Confirmation for Ticket Booking");
+        mail.setMailContent("Dear Pawan" +
+                "Your payment for ticket ID " + 1212 +
+                " was successful. \nThank you for booking with us!");
+        mailService.sendEmail(mail);
     }
 
     @Override
