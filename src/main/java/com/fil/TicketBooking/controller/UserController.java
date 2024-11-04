@@ -1,23 +1,15 @@
 package com.fil.TicketBooking.controller;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fil.TicketBooking.dto.UserDTO;
 import com.fil.TicketBooking.model.User;
-import com.fil.TicketBooking.service.UserService;
 import com.fil.TicketBooking.serviceimpl.UserServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/user")
@@ -49,8 +41,14 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/create-user")
-    public ResponseEntity<Object> createUser(@Valid @RequestBody User user) {
+//    @PostMapping(value = "/login")
+//    public ResponseEntity<Object> login(@Valid @RequestBody UserDTO user) {
+//        User createdUser = userService.(user);
+//        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+//    }
+
+    @PostMapping(value = "/signup")
+    public ResponseEntity<Object> signUp(@Valid @RequestBody User user) {
             User createdUser = userService.createUser(user);
             return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }

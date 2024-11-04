@@ -33,6 +33,11 @@ public class PaymentController {
         return new ResponseEntity<>(createdPayment, HttpStatus.CREATED);
     }
 
+    @PostMapping("/send-email")
+    public void sendEmail(@RequestParam String email) {
+        paymentService.sendEmail(email);
+    }
+
     @PutMapping("/update-payment-by-id/{id}")
     public ResponseEntity<Payment> updatePayment(@PathVariable Long id, @RequestBody Payment payment) {
         Payment updatedPayment = paymentService.updatePayment(id, payment);

@@ -1,9 +1,14 @@
 package com.fil.TicketBooking.serviceimpl;
+import com.fil.TicketBooking.dto.TicketBookingDTO;
+import com.fil.TicketBooking.enums.PaymentMethod;
+import com.fil.TicketBooking.enums.PaymentStatus;
 import com.fil.TicketBooking.enums.UserStatus;
 import com.fil.TicketBooking.model.Event;
+import com.fil.TicketBooking.model.Payment;
 import com.fil.TicketBooking.model.TicketBooking;
 import com.fil.TicketBooking.model.User;
 import com.fil.TicketBooking.repository.EventRepository;
+import com.fil.TicketBooking.repository.PaymentRepository;
 import com.fil.TicketBooking.repository.TicketBookingRepository;
 import com.fil.TicketBooking.repository.UserRepository;
 import com.fil.TicketBooking.service.TicketBookingService;
@@ -13,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class TicketBookingServiceImpl implements TicketBookingService {
@@ -32,7 +38,7 @@ public class TicketBookingServiceImpl implements TicketBookingService {
 
     @Transactional
     @Override
-    public TicketBooking bookEvent(TicketBooking ticketBooking) {
+    public TicketBookingDTO bookEvent(TicketBooking ticketBooking) {
         //first find the event
         Optional<Event> eventOpt = eventRepository.findById(ticketBooking.getPlace().getPlaceId());
         if (eventOpt.isPresent()) {
@@ -48,12 +54,11 @@ public class TicketBookingServiceImpl implements TicketBookingService {
                 } else {
                     throw new RuntimeException("User not found.");
                 }
-//                ticketBooking.setTotalMember(ticketBooking.getTotalMember());
-                event.setSoldTicket(event.getSoldTicket() + ticketBooking.getTotalMember());
+                event.setSoldTicket(event.getSoldTicket() - ticketBooking.getTotalMember());
                 userOpt.get().getTicketBookings().add(ticketBooking);
                 event.getTicketBookings().add(ticketBooking);
                 ticketBookingRepository.save(ticketBooking);
-                return ticketBooking;
+                return TicketBookingDTO.mapToDTO(ticketBooking);
             }else {
                 throw new RuntimeException("Not enough tickets available.");
             }
@@ -87,46 +92,5 @@ public class TicketBookingServiceImpl implements TicketBookingService {
         return ticketBookingRepository.findAll();
     }
 }
-
-
-
-
-
-
-//import com.fil.TicketBooking.enums.BookingStatus;
-//import com.fil.TicketBooking.model.TicketBooking;
-//import com.fil.TicketBooking.repository.TicketBookingRepository;
-//import com.fil.TicketBooking.service.TicketBookingService;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Service;
-//
-//import java.util.List;
-//
-//@Service
-//public class TicketBookingServiceImpl implements TicketBookingService {
-//
-//    @Autowired
-//    private TicketBookingRepository ticketBookingRepository;
-//
-//    @Override
-//    public TicketBooking bookTicket(TicketBooking ticketBooking) {
-//        // Add any logic related to booking a ticket here
-//        return ticketBookingRepository.save(ticketBooking);
-//    }
-//
-//    @Override
-//    public TicketBooking cancelTicket(Long ticketId) {
-//        TicketBooking ticket = ticketBookingRepository.findById(ticketId)
-//                .orElseThrow(() -> new RuntimeException("Ticket not found"));
-//        ticket.setStatus(BookingStatus.CANCELLED);  // Change status to cancelled
-//        return ticketBookingRepository.save(ticket);
-//    }
-//
-//    @Override
-//    public List<TicketBooking> getUserBookings(Long userId) {
-//        return ticketBookingRepository.findByUserUserId(userId);
-//    }
-//}
-//
 
 
