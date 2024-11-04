@@ -261,7 +261,6 @@ public class PaymentController {
 
             payment.setPaymentId(fetchedPayment.get("order_id"));
             paymentRepository.save(payment);
-
             // Print the payment link ID and URL
             System.out.println("Payment link ID: " + paymentLinkId);
             System.out.println("Payment link URL: " + paymentLinkUrl);
@@ -275,6 +274,15 @@ public class PaymentController {
             System.out.println("Error creating payment link: " + e.getMessage());
             throw new RazorpayException(e.getMessage());
         }
+    @PostMapping("/send-email")
+    public void sendEmail(@RequestParam String email) {
+        paymentService.sendEmail(email);
+    }
+
+    @PutMapping("/update-payment-by-id/{id}")
+    public ResponseEntity<Payment> updatePayment(@PathVariable Long id, @RequestBody Payment payment) {
+        Payment updatedPayment = paymentService.updatePayment(id, payment);
+        return new ResponseEntity<>(updatedPayment, HttpStatus.OK);
     }
 
     @GetMapping("/payments")

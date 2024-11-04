@@ -1,4 +1,7 @@
 package com.fil.TicketBooking.model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fil.TicketBooking.enums.UserRole;
 import com.fil.TicketBooking.enums.UserStatus;
 import jakarta.persistence.*;
@@ -17,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
