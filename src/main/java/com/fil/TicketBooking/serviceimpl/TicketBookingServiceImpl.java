@@ -83,7 +83,7 @@ public class TicketBookingServiceImpl implements TicketBookingService {
     }
 
     @Override
-    public TicketBooking getTicketBookingById(Long id) {
+    public TicketBooking findTicketBookingById(Long id) {
         return ticketBookingRepository.findById(id).orElse(null);
     }
 
@@ -91,6 +91,8 @@ public class TicketBookingServiceImpl implements TicketBookingService {
     public List<TicketBooking> getAllTicketBookings() {
         return ticketBookingRepository.findAll();
     }
+
+
 }
 
 

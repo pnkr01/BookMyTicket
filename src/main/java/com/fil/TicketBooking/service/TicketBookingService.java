@@ -9,6 +9,8 @@ public interface TicketBookingService {
     TicketBookingDTO bookEvent(TicketBooking ticketBooking);
     TicketBooking updateTicketBooking(Long id, TicketBooking ticketBooking);
     void deleteTicketBooking(Long id);
-    TicketBooking getTicketBookingById(Long id);
+    TicketBooking findTicketBookingById(Long id);
     List<TicketBooking> getAllTicketBookings();
+
+  //  TicketBooking findTicketBookingById(Long ticketId);
 }
