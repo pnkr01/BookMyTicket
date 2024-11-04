@@ -37,7 +37,7 @@ public class AuthController {
 	private JwtTokenProvider jwtTokenProvider;
 	private CustomUserDetails customUserDetails;
 //	private CartService cartService;
-	
+
 	public AuthController(UserRepository userRepository,PasswordEncoder passwordEncoder,JwtTokenProvider jwtTokenProvider,CustomUserDetails customUserDetails) {
 		this.userRepository=userRepository;
 		this.passwordEncoder=passwordEncoder;
@@ -48,37 +48,22 @@ public class AuthController {
 	
 	@PostMapping("/signup")
 	public ResponseEntity<AuthResponse> createUserHandler(@Valid @RequestBody User user) throws UserException {
-		
-		  	String email = user.getEmail();
-	        String password = user.getPassword();
-        String fullName=user.getName();
-        String phoneNumber=user.getPhone();
-//	        String lastName=user.getLastName();
-//	        String role=user.getRole();
 	        
-	        User isEmailExist=userRepository.findByEmail(email);
+	        User isEmailExist=userRepository.findByEmail(user.getEmail());
 
 	        // Check if user with the given email already exists
 	        if (isEmailExist!=null) {
 	        	
 	            throw new UserException("Email Is Already Used With Another Account");
 	        }
-
-	        // Create new user
-			User createdUser= new User();
-			createdUser.setEmail(email);
-			createdUser.setName(fullName);
-			createdUser.setPhone(phoneNumber);
-//			createdUser.setLastName(lastName);
 		
-	        createdUser.setPassword(passwordEncoder.encode(password));
-	     //   createdUser.setRole(role);
+	        user.setPassword(passwordEncoder.encode(user.getPassword()));
 	        
-	        User savedUser= userRepository.save(createdUser);
+	        User savedUser= userRepository.save(user);
 	        
 	     //   cartService.createCart(savedUser);
 
-	        Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
+	        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
 	        SecurityContextHolder.getContext().setAuthentication(authentication);
 	        
 	        String token = jwtTokenProvider.generateToken(authentication);
@@ -129,4 +114,5 @@ public class AuthController {
 //	      List<User> users = userRepository.findAllUsers();
 //	      return ResponseEntity.ok(users);
 //	  }
+
 }

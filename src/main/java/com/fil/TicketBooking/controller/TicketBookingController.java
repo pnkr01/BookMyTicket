@@ -24,7 +24,7 @@ public class TicketBookingController {
 
     @GetMapping("/get-ticket-booking-by-id/{id}")
     public ResponseEntity<TicketBooking> getTicketBookingById(@PathVariable Long id) {
-        TicketBooking ticketBooking = ticketBookingService.getTicketBookingById(id);
+        TicketBooking ticketBooking = ticketBookingService.findTicketBookingById(id);
         return new ResponseEntity<>(ticketBooking, HttpStatus.OK);
     }
 
