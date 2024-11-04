@@ -22,10 +22,14 @@ public class QRCode {
     @ManyToOne
     @JoinColumn(name = "ticket_id", nullable = false)
     private TicketBooking ticket;
-
-    private String qrCode;
     private Timestamp generatedAt;
-    private Long noOfPass;
+    private String qrCode;
+    private int noOfPass;
     @Enumerated(EnumType.STRING)
     private QRCodeStatus status; // active, expired
+
+    @PrePersist
+    protected void onCreate() {
+        generatedAt = new Timestamp(System.currentTimeMillis());
+    }
 }

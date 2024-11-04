@@ -362,6 +362,7 @@ public class PaymentController {
         paymentLinkRequest.put("amount", payment.getAmount()*100);
         paymentLinkRequest.put("currency", "INR");
 
+<<<<<<< HEAD
         Order order = razorpayClient.orders.create(paymentLinkRequest);
 //        return order.get("id");
 
@@ -397,6 +398,77 @@ public class PaymentController {
         PaymentLinkResponse response = new PaymentLinkResponse(paymentLinkUrl, paymentLink.get("id"));
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+=======
+            // Set the callback URL and method
+            paymentLinkRequest.put("callback_url","http://localhost:4200/payment-success?order_id="+paymentId);
+            paymentLinkRequest.put("callback_method","get");
+            // Create the payment link using the paymentLink.create() method
+            PaymentLink payment1 = razorpayClient.paymentLink.create(paymentLinkRequest);
+
+            String paymentLinkId = payment1.get("id");
+            String paymentLinkUrl = payment1.get("short_url");
+
+            PaymentLinkResponse res=new PaymentLinkResponse(paymentLinkUrl,paymentLinkId);
+
+            PaymentLink fetchedPayment = razorpayClient.paymentLink.fetch(paymentLinkId);
+
+            payment.setPaymentId(fetchedPayment.get("order_id"));
+            paymentRepository.save(payment);
+            // Print the payment link ID and URL
+            System.out.println("Payment link ID: " + paymentLinkId);
+            System.out.println("Payment link URL: " + paymentLinkUrl);
+            System.out.println("Order Id : "+fetchedPayment.get("order_id")+fetchedPayment);
+
+            return new ResponseEntity<PaymentLinkResponse>(res,HttpStatus.ACCEPTED);
+
+
+        }
+        catch(Exception e){
+            System.out.println("Error creating payment link: " + e.getMessage());
+            throw new RazorpayException(e.getMessage());
+        }
+    @PostMapping("/send-email")
+    public void sendEmail(@RequestParam String email) {
+        paymentService.sendEmail(email);
+    }
+
+    @PutMapping("/update-payment-by-id/{id}")
+    public ResponseEntity<Payment> updatePayment(@PathVariable Long id, @RequestBody Payment payment) {
+        Payment updatedPayment = paymentService.updatePayment(id, payment);
+        return new ResponseEntity<>(updatedPayment, HttpStatus.OK);
+    }
+
+    @GetMapping("/payments")
+    public ResponseEntity<ApiResponse> redirect(@RequestParam(name="payment_id") String paymentId, @RequestParam("order_id")Long orderId) throws RazorpayException, PaymentException, PaymentException {
+        RazorpayClient razorpay = new RazorpayClient(apiKey, apiSecret);
+        Payment order =paymentService.findPaymentById(orderId);
+
+        try {
+
+
+            com.razorpay.Payment payment = razorpay.payments.fetch(paymentId);
+            System.out.println("payment details --- "+payment+payment.get("status"));
+
+            if(payment.get("status").equals("captured")) {
+                System.out.println("payment details --- "+payment+payment.get("status"));
+
+                order.setPaymentId(Long.valueOf(paymentId));
+                order.setPaymentStatus(PaymentStatus.SUCCESS);
+            //    order.setPaymentStatus(PaymentStatus.PLACED);
+//			order.setOrderItems(order.getOrderItems());
+                System.out.println(order.getPaymentStatus()+"payment status ");
+                paymentRepository.save(order);
+            }
+            ApiResponse res=new ApiResponse("your order get placed", true);
+            return new ResponseEntity<ApiResponse>(res,HttpStatus.OK);
+
+        } catch (Exception e) {
+            System.out.println("errrr payment -------- ");
+            new RedirectView("https://shopwithzosh.vercel.app/payment/failed");
+            throw new RazorpayException(e.getMessage());
+        }
+
+>>>>>>> a579fd5650118b4b90a318ce66272450f5662832
     }
 
     // Other methods...

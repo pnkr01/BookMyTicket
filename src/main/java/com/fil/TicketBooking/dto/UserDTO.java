@@ -1,6 +1,5 @@
 package com.fil.TicketBooking.dto;
-
-import jakarta.persistence.Entity;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 

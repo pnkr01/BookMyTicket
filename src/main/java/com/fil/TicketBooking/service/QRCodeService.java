@@ -1,5 +1,6 @@
 package com.fil.TicketBooking.service;
 import com.fil.TicketBooking.model.QRCode;
+import com.fil.TicketBooking.model.TicketBooking;
 
 import java.util.List;
 

@@ -1,5 +1,6 @@
 package com.fil.TicketBooking.controller;
 import com.fil.TicketBooking.model.QRCode;
+import com.fil.TicketBooking.model.TicketBooking;
 import com.fil.TicketBooking.service.QRCodeService;
 import com.fil.TicketBooking.serviceimpl.QRCodeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class QRCodeController {
         return new ResponseEntity<>(qrCode, HttpStatus.OK);
     }
 
-    @PostMapping("/create-qr-code-by-id")
+    @PostMapping("/create-qr-code")
     public ResponseEntity<QRCode> createQRCode(@RequestBody QRCode qrCode) {
         QRCode createdQRCode = qrCodeService.createQRCode(qrCode);
         return new ResponseEntity<>(createdQRCode, HttpStatus.CREATED);
