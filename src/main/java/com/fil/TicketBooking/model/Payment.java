@@ -30,6 +30,15 @@ public class Payment {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
+    public String getRazorpayOrderId() {
+        return razorpayOrderId;
+    }
+
+    public void setRazorpayOrderId(String razorpayOrderId) {
+        this.razorpayOrderId = razorpayOrderId;
+    }
+
+    private String razorpayOrderId;
     @PrePersist
     protected void onCreate() {
         createdAt = new Timestamp(System.currentTimeMillis());
