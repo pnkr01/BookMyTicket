@@ -14,6 +14,10 @@ import java.util.Optional;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
+    public PaymentServiceImpl(PaymentRepository paymentRepository) {
+        this.paymentRepository = paymentRepository;
+    }
+
     @Override
     public Payment createOrder(User user) {
         return null;
@@ -39,6 +43,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public Payment placedOrder(Long orderId) throws PaymentException {
         return null;
+    }
     public Payment createPayment(Payment payment) {
         //call raxorpay get the payment then save it.
         Payment save = paymentRepository.save(payment);
@@ -69,6 +74,26 @@ public class PaymentServiceImpl implements PaymentService {
                 "Your payment for ticket ID " + 1212 +
                 " was successful. \nThank you for booking with us!");
         mailService.sendEmail(mail);
+    }
+
+    @Override
+    public Payment updatePayment(Long id, Payment payment) {
+        return null;
+    }
+
+    @Override
+    public void deletePayment(Long id) {
+
+    }
+
+    @Override
+    public Payment getPaymentById(Long id) {
+        return null;
+    }
+
+    @Override
+    public List<Payment> getAllPayments() {
+        return List.of();
     }
 
     @Override

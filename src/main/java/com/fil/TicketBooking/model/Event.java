@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
+
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -47,6 +50,12 @@ public class Event {
     @NonNull
     @JoinColumn(name = "ticket_price")
     private Long ticketPrice;
+    @NonNull
+    @NotEmpty(message = "event from date cannot be null")
+    private Date eventFromDate;
+    @NonNull
+    @NotEmpty(message = "event to date cannot be null")
+    private Date eventToDate;
 
     @PrePersist
     protected void onCreate() {

@@ -10,16 +10,15 @@ import org.springframework.mail.javamail.JavaMailSender;
 import java.io.File;
 
 public class EmailServiceImpl implements EmailService {
-    @Autowired
     private JavaMailSender mailSender;
     private Logger logger = LoggerFactory.getLogger(EmailServiceImpl.class);
 
     @Override
     public void sendEmail(String to, String subject, String msg) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-      simpleMailMessage.setTo(to);
-      simpleMailMessage.setSubject(subject);
-      simpleMailMessage.setText(msg);
+        simpleMailMessage.setTo(to);
+          simpleMailMessage.setSubject(subject);
+          simpleMailMessage.setText(msg);
         mailSender.send(simpleMailMessage);
         logger.info("email has been sent...");
     }

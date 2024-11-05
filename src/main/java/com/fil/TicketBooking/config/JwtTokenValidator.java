@@ -30,10 +30,8 @@ public class JwtTokenValidator extends OncePerRequestFilter {
 			throws ServletException, IOException {
 		
 		String jwt = request.getHeader(JwtConstant.JWT_HEADER);
-		System.out.println("jwt ------ "+jwt);
 		if(jwt!=null) {
 			jwt=jwt.substring(7);
-			System.out.println("jwt ------ "+jwt);
 			try {
 				
 				SecretKey key= Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
@@ -50,7 +48,6 @@ public class JwtTokenValidator extends OncePerRequestFilter {
 				SecurityContextHolder.getContext().setAuthentication(athentication);
 				
 			} catch (Exception e) {
-				// TODO: handle exception
 				throw new BadCredentialsException("invalid token...");
 			}
 		}

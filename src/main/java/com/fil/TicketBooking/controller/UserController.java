@@ -89,6 +89,8 @@ public class UserController {
     Map<String, Object> response = new HashMap<>();
     @Autowired
     private UserServiceImpl userService;
+    @Autowired
+    private UserServiceImpl userServiceImpl;
 
     @GetMapping(value = "/get-all-user")
     public ResponseEntity<List<User>> getAllUsers() {
@@ -113,16 +115,9 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-//    @PostMapping(value = "/login")
-//    public ResponseEntity<Object> login(@Valid @RequestBody UserDTO user) {
-//        User createdUser = userService.(user);
-//        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
-//    }
-
-    @PostMapping(value = "/signup")
-    public ResponseEntity<Object> signUp(@Valid @RequestBody User user) {
-            User createdUser = userService.createUser(user);
-            return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    @PostMapping("/change-to-po/{email}")
+    public ResponseEntity<?> changeUserToPO(@PathVariable String email){
+      return  userServiceImpl.changeUserStatusToPO(email);
     }
 
 
