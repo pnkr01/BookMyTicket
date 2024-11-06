@@ -31,12 +31,12 @@ public class AppConfig {
         http
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").authenticated()
-                        .requestMatchers("/refresh-token").permitAll()  // Allow refresh token endpoint
+                        .requestMatchers("/api/events/top-sold").permitAll().requestMatchers("/api/events/search/**")
+                        .permitAll()
+                        .requestMatchers("/api/events/ongoing").permitAll().requestMatchers("/api/events/upcoming").
+                        permitAll().requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll())
-
                 .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -47,12 +47,8 @@ public class AppConfig {
 
     private CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList(
-                "http://localhost:5173",
-                "http://localhost:4000",
-                "http://localhost:4200",
-                "https://shopwithzosh.vercel.app",
-                "https://ecommerce-angular-blue.vercel.app"
+        config.setAllowedOrigins(List.of(
+                "http://localhost:5173"
         ));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         config.setAllowCredentials(true);
