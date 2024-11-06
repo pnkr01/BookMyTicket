@@ -1,7 +1,7 @@
 package com.fil.TicketBooking.dto;
-
 import lombok.*;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Getter
@@ -19,4 +19,7 @@ public class EventDTO {
     private String openDays;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+    private Date fromDate;
+    private Date toDate;
+    private LocationDTO location;
 }

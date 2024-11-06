@@ -1,6 +1,7 @@
 package com.fil.TicketBooking.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fil.TicketBooking.enums.UserRole;
 import com.fil.TicketBooking.enums.UserStatus;
@@ -10,6 +11,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.Type;
+
 import java.sql.Timestamp;
 import java.util.List;
 
