@@ -28,16 +28,25 @@ public class LocationController {
         return new ResponseEntity<>(location, HttpStatus.OK);
     }
 
-    @GetMapping("/get-location-by-name/{city}")
-    public ResponseEntity<Location> getLocationByName(@PathVariable String city) {
-        return ResponseEntity.ok((Location) locationService.getLocationsByCity(city));
-    }
+//    @GetMapping("/get-location-by-name/{city}")
+//    public ResponseEntity<Location> getLocationByName(@PathVariable String city) {
+//        return ResponseEntity.ok((Location) locationService.getLocationsByCity(city));
+//    }
 
     @PostMapping("/create-location")
     public ResponseEntity<Location> createLocation(@RequestBody Location location) {
         Location createdLocation = locationService.createLocation(location);
         return new ResponseEntity<>(createdLocation, HttpStatus.CREATED);
     }
+    @GetMapping("/get-location-by-name/{city}")
+    public ResponseEntity<List<Location>> getLocationsByName(@PathVariable String city) {
+        List<Location> locations = locationService.getLocationsByCity(city);
+        if (locations.isEmpty()) {
+            return ResponseEntity.notFound().build();  // Return 404 if no locations found
+        }
+        return ResponseEntity.ok(locations);  // Return the list of locations
+    }
+
 
     @PutMapping("/update-location/{id}")
     public ResponseEntity<Location> updateLocation(@PathVariable Long id, @RequestBody Location location) {
