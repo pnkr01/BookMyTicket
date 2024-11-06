@@ -121,6 +121,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -164,7 +165,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @NotNull
-    private EventDTO convertToEventDTO(Event event) {
+    public EventDTO convertToEventDTO(Event event) {
         return new EventDTO(
                 event.getPlaceId(),
                 event.getPlaceName(),
@@ -201,5 +202,13 @@ public class EventServiceImpl implements EventService {
     public Page<EventDTO> getUpcomingEvents(Pageable pageable) {
         Date currentDate = new Date(System.currentTimeMillis());
         return eventRepository.findUpcomingEvents(currentDate, pageable).map(this::convertToEventDTO);
+    }
+
+    @Override
+    public List<EventDTO> searchEventsByLocation(String locationName) {
+        List<Event> events = eventRepository.searchByLocationName(locationName);
+       return events.stream()
+                .map(this::convertToEventDTO)
+                .collect(Collectors.toList());
     }
 }

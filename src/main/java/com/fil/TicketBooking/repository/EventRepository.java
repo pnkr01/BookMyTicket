@@ -45,6 +45,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
+import java.util.List;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
@@ -57,4 +58,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("SELECT e FROM Event e WHERE e.eventFromDate > :currentDate")
     Page<Event> findUpcomingEvents(@Param("currentDate") Date currentDate, Pageable pageable);
+
+    @Query("SELECT e FROM Event e WHERE LOWER(e.location.locationName) LIKE LOWER(CONCAT('%', :locationName, '%'))")
+    List<Event> searchByLocationName(@Param("locationName") String locationName);
 }

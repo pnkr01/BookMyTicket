@@ -64,7 +64,7 @@ public class JwtTokenValidator extends OncePerRequestFilter {
 		// Skip validation for public endpoints
 		if ("/api/events/ongoing".equals(path) ||
 				"/api/events/upcoming".equals(path) ||
-				"/api/events/top-sold".equals(path)) {
+				"/api/events/top-sold".equals(path) || "/api/events/search".equals(path)) {
 
 			filterChain.doFilter(request, response);
 			return;

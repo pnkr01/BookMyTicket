@@ -32,7 +32,9 @@ public class AppConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/events/top-sold").permitAll() .requestMatchers("/api/events/ongoing").permitAll().requestMatchers("/api/events/upcoming").
+                        .requestMatchers("/api/events/top-sold").permitAll().requestMatchers("/api/events/search/**")
+                        .permitAll()
+                        .requestMatchers("/api/events/ongoing").permitAll().requestMatchers("/api/events/upcoming").
                         permitAll().requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll())
                 .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)

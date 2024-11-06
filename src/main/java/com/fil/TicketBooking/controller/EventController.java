@@ -88,12 +88,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
 
     @Autowired
     private EventServiceImpl eventService;
+    @Autowired
+    private EventServiceImpl eventServiceImpl;
 
     @GetMapping("/top-sold")
     public ResponseEntity<Page<EventDTO>> getTopSoldEvents(
@@ -109,6 +114,12 @@ public class EventController {
             @RequestParam(defaultValue = "5") int size) {
         Page<EventDTO> ongoingEvents = eventService.getOngoingEvents(PageRequest.of(page, size));
         return ResponseEntity.ok(ongoingEvents);
+    }
+
+    @GetMapping("/search/{locationName}")
+    public ResponseEntity<List<EventDTO>> searchEvents(@PathVariable String locationName) {
+        List<EventDTO> events = eventService.searchEventsByLocation(locationName);
+        return ResponseEntity.ok(events);
     }
 
     @GetMapping("/upcoming")

@@ -32,6 +32,8 @@ import com.fil.TicketBooking.model.Event;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface EventService {
     Event createEvent(Event event);
     Event updateEvent(Long id, Event event);
@@ -40,4 +42,5 @@ public interface EventService {
     Page<EventDTO> getTopSoldEvents(Pageable pageable);
     Page<EventDTO> getOngoingEvents(Pageable pageable);
     Page<EventDTO> getUpcomingEvents(Pageable pageable);
+    List<EventDTO> searchEventsByLocation(String locationName);
 }
