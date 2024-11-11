@@ -1,5 +1,6 @@
 package com.fil.TicketBooking.controller;
 
+import com.fil.TicketBooking.dto.LocationDTO;
 import com.fil.TicketBooking.model.Location;
 import com.fil.TicketBooking.service.LocationService;
 import com.fil.TicketBooking.serviceimpl.LocationServiceImpl;
@@ -17,8 +18,8 @@ public class LocationController {
     private LocationServiceImpl locationService;
 
     @GetMapping("/get-all-locations")
-    public ResponseEntity<List<Location>> getAllLocations() {
-        List<Location> locations = locationService.getAllLocations();
+    public ResponseEntity<List<LocationDTO>> getAllLocations() {
+        List<LocationDTO> locations = locationService.getAllLocations();
         return new ResponseEntity<>(locations, HttpStatus.OK);
     }
 

@@ -39,8 +39,9 @@ public interface EventService {
     Event updateEvent(Long id, Event event);
     void deleteEvent(Long id);
     Event getEventById(Long id);
-    Page<EventDTO> getTopSoldEvents(Pageable pageable);
-    Page<EventDTO> getOngoingEvents(Pageable pageable);
-    Page<EventDTO> getUpcomingEvents(Pageable pageable);
+    Page<EventDTO> getTopSoldEvents(String city,Pageable pageable);
+    Page<EventDTO> getUpcomingEvents(String city,Pageable pageable);
+    Page<EventDTO> getOngoingEvents(String city, Pageable pageable);
     List<EventDTO> searchEventsByLocation(String locationName);
+    List<EventDTO> getEventsByUserId(Long userId);
 }

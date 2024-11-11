@@ -1,8 +1,6 @@
 package com.fil.TicketBooking.serviceimpl;
-import com.fil.TicketBooking.enums.QRCodeStatus;
-import com.fil.TicketBooking.model.Payment;
+import com.fil.TicketBooking.dto.QRCodeDTO;
 import com.fil.TicketBooking.model.QRCode;
-import com.fil.TicketBooking.model.TicketBooking;
 import com.fil.TicketBooking.repository.QRCodeRepository;
 import com.fil.TicketBooking.service.QRCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +13,7 @@ import java.util.Optional;
 @Service
 public class QRCodeServiceImpl implements QRCodeService {
 
+    @Autowired
     private final QRCodeRepository qrCodeRepository;
 
     @Autowired
@@ -23,9 +22,11 @@ public class QRCodeServiceImpl implements QRCodeService {
     }
 
     @Override
-    public QRCode createQRCode(QRCode qrCode) {
+    public String createQRCode(QRCode qrCode) {
+        String qrCodeUrl = String.valueOf("Total Pass is"+qrCode.getNoOfPass()+"and TicketId is"+qrCode.getTicket().getTicketId());
+        qrCode.setQrCode(qrCodeUrl);
         qrCodeRepository.save(qrCode);
-        return qrCode;
+        return qrCodeUrl;
     }
 
     @Override
@@ -44,9 +45,63 @@ public class QRCodeServiceImpl implements QRCodeService {
     }
 
     @Override
-    public QRCode getQRCodeById(Long id) {
-        return qrCodeRepository.findById(id).orElse(null);
+    public QRCodeDTO getQRCodeById(Long id) throws Exception {
+        return null;
     }
+
+    @Override
+    public QRCodeDTO findByTicketId(Long ticketId) throws Exception {
+        Optional<QRCode> qrCode = qrCodeRepository.findByTicketTicketId(ticketId);
+
+        // Check if QR code exists
+        if (qrCode.isPresent()) {
+            QRCode code = qrCode.get();
+            return new QRCodeDTO(
+                    code.getQrCodeId(),
+                    code.getQrCode(),
+                    code.getNoOfPass(),
+                    code.getStatus()
+            );
+        } else {
+            // Handle the case where the QR code is not found
+            throw new Exception("QR Code with ticketId " + ticketId + " not found");
+        }
+    }
+
+//    @Override
+//    public QRCodeDTO getQRCodeById(Long id) {
+//        Optional<QRCode> qrCode = qrCodeRepository.findById(id);
+//        System.out.println(qrCode);
+//        return new QRCodeDTO(
+//                qrCode.get().getQrCodeId(),
+//                qrCode.get().getQrCode(),
+//                qrCode.get().getNoOfPass(),
+//                qrCode.get().getStatus()
+//        );
+//
+////        return qrCodeDTO;
+//
+////                qrCodeRepository.findById(id).orElse(null);
+//    }
+//@Override
+//public QRCodeDTO getQRCodeById(Long id) throws Exception {
+//    Optional<QRCode> qrCode = qrCodeRepository.findById(id);
+//
+//    // Check if QR code exists
+//    if (qrCode.isPresent()) {
+//        QRCode code = qrCode.get();
+//        return new QRCodeDTO(
+//                code.getQrCodeId(),
+//                code.getQrCode(),
+//                code.getNoOfPass(),
+//                code.getStatus()
+//        );
+//    } else {
+//        // Handle the case where the QR code is not found
+//        throw new Exception("QR Code with id " + id + " not found");
+//    }
+//}
+
 
     @Override
     public List<QRCode> getAllQRCodes() {

@@ -36,6 +36,7 @@
 
 package com.fil.TicketBooking.repository;
 
+import com.fil.TicketBooking.dto.EventDTO;
 import com.fil.TicketBooking.model.Event;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -53,12 +54,26 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     @Query("SELECT e FROM Event e ORDER BY e.soldTicket DESC")
     Page<Event> findTopSoldEvents(Pageable pageable);
 
+    @Query("SELECT e FROM Event e where e.location.locationCity = :city ORDER BY e.soldTicket DESC")
+    Page<Event> findTopSoldEventsInCity(String city,Pageable pageable);
+
+
     @Query("SELECT e FROM Event e WHERE e.eventFromDate <= :currentDate AND e.eventToDate >= :currentDate")
     Page<Event> findOngoingEvents(@Param("currentDate") Date currentDate, Pageable pageable);
+
+    @Query("SELECT e FROM Event e WHERE e.eventFromDate <= :currentDate AND e.eventToDate >= :currentDate AND e.location.locationCity = :city")
+    Page<Event> findOngoingEventsInCity(@Param("currentDate") Date currentDate,@Param("city") String city, Pageable pageable);
 
     @Query("SELECT e FROM Event e WHERE e.eventFromDate > :currentDate")
     Page<Event> findUpcomingEvents(@Param("currentDate") Date currentDate, Pageable pageable);
 
+    @Query("SELECT e FROM Event e WHERE e.eventFromDate > :currentDate AND e.location.locationCity = :city")
+    Page<Event> findUpcomingEventsInCity(@Param("currentDate") Date currentDate, @Param("city") String city, Pageable pageable);
+
+
     @Query("SELECT e FROM Event e WHERE LOWER(e.location.locationName) LIKE LOWER(CONCAT('%', :locationName, '%'))")
     List<Event> searchByLocationName(@Param("locationName") String locationName);
+
+    @Query("SELECT e FROM Event e WHERE e.addedBy = :userId")
+    List<Event> findByUserId(@Param("userId") Long userId);
 }

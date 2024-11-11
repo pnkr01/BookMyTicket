@@ -5,6 +5,7 @@ import com.fil.TicketBooking.model.User;
 import com.fil.TicketBooking.request.LoginRequest;
 import com.fil.TicketBooking.response.AuthResponse;
 import com.fil.TicketBooking.service.AuthService;
+import com.fil.TicketBooking.serviceimpl.AuthServiceImpl;
 import com.fil.TicketBooking.serviceimpl.UserServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +25,9 @@ public class UserController {
     @Autowired
     private UserServiceImpl userServiceImpl;
 
-    private final AuthService authService;
-
     @Autowired
-    public UserController(AuthService authService) {
-        this.authService = authService;
-    }
+    private AuthServiceImpl authService;
+
 
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(@Valid @RequestBody User user) throws UserException {

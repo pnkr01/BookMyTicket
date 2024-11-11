@@ -1,11 +1,13 @@
 package com.fil.TicketBooking.exception;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.fil.TicketBooking.errors.ResourceAlreadyExistsException;
 import com.fil.TicketBooking.errors.UserException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,6 +20,7 @@ import java.util.Set;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
@@ -61,6 +64,16 @@ public class GlobalExceptionHandler {
         errorDetails.put("errorslen", 1);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorDetails);
     }
+
+    @ExceptionHandler(TransactionSystemException.class)
+    public ResponseEntity<?> handleTransactionSystemException(TransactionSystemException ex) {
+        Throwable rootCause = ex.getRootCause();
+        String message = rootCause != null ? rootCause.getMessage() : ex.getMessage();
+        log.error("Transaction error: {}", message);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", "Transaction failed", "message", message));
+    }
+
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

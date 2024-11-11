@@ -31,6 +31,7 @@ public class MailConfiguration
         javaMailProperties.put("mail.debug", "true");
         javaMailProperties.put("mail.smtp.ssl.trust", "*");
 
+
         javaMailSender.setJavaMailProperties(javaMailProperties);
         return javaMailSender;
     }

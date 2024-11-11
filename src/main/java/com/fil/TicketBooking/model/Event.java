@@ -49,10 +49,8 @@ public class Event {
     @JoinColumn(name = "ticket_price")
     private Long ticketPrice;
     @NonNull
-    @NotEmpty(message = "event from date cannot be null")
     private Date eventFromDate;
     @NonNull
-    @NotEmpty(message = "event to date cannot be null")
     private Date eventToDate;
 
     @PrePersist

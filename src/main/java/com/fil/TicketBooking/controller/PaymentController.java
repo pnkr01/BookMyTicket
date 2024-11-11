@@ -3,15 +3,18 @@ package com.fil.TicketBooking.controller;
 
 import com.fil.TicketBooking.enums.PaymentStatus;
 import com.fil.TicketBooking.exception.PaymentException;
+import com.fil.TicketBooking.model.EmailRequest;
 import com.fil.TicketBooking.model.Payment;
 import com.fil.TicketBooking.repository.PaymentRepository;
 import com.fil.TicketBooking.response.PaymentLinkResponse;
 import com.fil.TicketBooking.service.PaymentService;
 import com.fil.TicketBooking.service.TicketBookingService;
+import com.fil.TicketBooking.serviceimpl.PaymentServiceImpl;
 import com.razorpay.Order;
 import com.razorpay.PaymentLink;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
+import jakarta.validation.Valid;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,12 +23,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 @RestController
 @RequestMapping("/api/payments")
 public class PaymentController {
 
     @Autowired
-    private PaymentService paymentService;
+    private PaymentServiceImpl paymentService;
 
     @Autowired
     private Environment environment;
@@ -51,6 +57,7 @@ public class PaymentController {
         JSONObject paymentLinkRequest = new JSONObject();
         paymentLinkRequest.put("amount", payment.getAmount()*100);
         paymentLinkRequest.put("currency", "INR");
+//        paymentLinkRequest.put("method", "UPI");
 
         Order order = razorpayClient.orders.create(paymentLinkRequest);
 //
@@ -67,6 +74,19 @@ public class PaymentController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    // Other methods...
+
+    public void updatePayment(Payment payment) {
+        // Update the timestamp
+        payment.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));  // Ensure the updated timestamp is set
+        // Save updated payment details to the database
+        paymentRepository.save(payment);  // This will update the existing payment record
+    }
+
+    @PostMapping("/send-email/{email}")
+    public ResponseEntity<Boolean> sendEmail(@PathVariable String email, @RequestBody EmailRequest emailRequest) {
+        paymentService.sendEmail(email, emailRequest.getTicketId(), emailRequest.getNoOfPass());
+        return ResponseEntity.ok(true);
+    }
+
 }
 

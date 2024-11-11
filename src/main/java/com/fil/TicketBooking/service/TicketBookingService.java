@@ -11,6 +11,5 @@ public interface TicketBookingService {
     void deleteTicketBooking(Long id);
     TicketBooking findTicketBookingById(Long id);
     List<TicketBooking> getAllTicketBookings();
-
-  //  TicketBooking findTicketBookingById(Long ticketId);
+    List<TicketBookingDTO> getBookingsByUserId(Long userId);
 }

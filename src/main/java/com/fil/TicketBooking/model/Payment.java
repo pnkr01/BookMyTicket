@@ -24,6 +24,7 @@ public class Payment {
     private double amount;
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
+    @Column(name = "transaction_id",nullable = false)
     private Long transactionId;
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;

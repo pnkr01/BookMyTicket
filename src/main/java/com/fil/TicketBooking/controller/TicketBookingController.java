@@ -23,6 +23,14 @@ public class TicketBookingController {
         return new ResponseEntity<>(ticketBookings, HttpStatus.OK);
     }
 
+    @GetMapping("/get-user-ticket-bookings/{userID}")
+    public ResponseEntity<List<TicketBookingDTO>> getUserTicketBookings(@PathVariable int userID) {
+        Long userId = (long) userID;
+        List<TicketBookingDTO> ticketBookings = ticketBookingService.getBookingsByUserId(userId);
+        return new ResponseEntity<>(ticketBookings, HttpStatus.OK);
+    }
+
+
     @GetMapping("/get-ticket-booking-by-id/{id}")
     public ResponseEntity<TicketBooking> getTicketBookingById(@PathVariable Long id) {
         TicketBooking ticketBooking = ticketBookingService.findTicketBookingById(id);

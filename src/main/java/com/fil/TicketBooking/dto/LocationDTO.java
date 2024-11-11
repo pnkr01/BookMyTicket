@@ -13,4 +13,5 @@ public class LocationDTO {
     private Long locationId;
     private String locationName;
     private String description;
+    private String city;
 }

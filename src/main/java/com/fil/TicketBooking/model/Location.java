@@ -1,6 +1,7 @@
 package com.fil.TicketBooking.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.sql.Timestamp;
 import java.util.List;
@@ -28,6 +29,8 @@ public class Location {
 
     @OneToMany(mappedBy = "location")
     private List<Event> events;
+    @NotNull
+    private String locationCity;
 
     // Getters and Setters
 

@@ -1,7 +1,5 @@
 package com.fil.TicketBooking.response;
 
-
-
 public class ApiResponse {
 
     private String message;

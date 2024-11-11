@@ -35,7 +35,9 @@ public class AppConfig {
                         .requestMatchers("/api/events/top-sold").permitAll().requestMatchers("/api/events/search/**")
                         .permitAll()
                         .requestMatchers("/api/events/ongoing").permitAll().requestMatchers("/api/events/upcoming").
-                        permitAll().requestMatchers("/api/**").authenticated()
+                        permitAll().requestMatchers("/api/locations/get-all-locations").permitAll().
+                        requestMatchers("/api/payments/**").authenticated()
+                        .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll())
                 .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)

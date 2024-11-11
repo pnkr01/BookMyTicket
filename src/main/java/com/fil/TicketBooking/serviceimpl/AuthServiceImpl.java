@@ -16,9 +16,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
+@Component
 public class AuthServiceImpl implements AuthService {
 
     @Autowired
@@ -54,7 +55,6 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse signin(LoginRequest loginRequest) {
         Authentication authentication = authenticate(loginRequest.getEmail(), loginRequest.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         String token = jwtTokenProvider.generateToken(authentication);
         return new AuthResponse(token, true, userRepository.findByEmail(loginRequest.getEmail()));
     }

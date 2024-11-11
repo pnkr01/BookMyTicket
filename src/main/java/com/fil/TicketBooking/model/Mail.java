@@ -8,7 +8,6 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
-@Component
 public class Mail
 {
     private String mailFrom;
@@ -18,7 +17,7 @@ public class Mail
     private String mailSubject;
     private String mailContent;
     private String contentType = "text/plain";
-    private List<Object> attachments;
+    private List <Object> attachments;
 
     public Date getMailSendDate() {
         return new Date();

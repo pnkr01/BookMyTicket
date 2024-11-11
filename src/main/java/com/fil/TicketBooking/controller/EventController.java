@@ -89,7 +89,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/events")
@@ -103,16 +102,20 @@ public class EventController {
     @GetMapping("/top-sold")
     public ResponseEntity<Page<EventDTO>> getTopSoldEvents(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
-        Page<EventDTO> topSoldEvents = eventService.getTopSoldEvents(PageRequest.of(page, size));
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) String city
+            ) {
+        Page<EventDTO> topSoldEvents = eventService.getTopSoldEvents(city,PageRequest.of(page, size));
         return ResponseEntity.ok(topSoldEvents);
     }
 
     @GetMapping("/ongoing")
     public ResponseEntity<Page<EventDTO>> getOngoingEvents(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
-        Page<EventDTO> ongoingEvents = eventService.getOngoingEvents(PageRequest.of(page, size));
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) String city
+            ) {
+        Page<EventDTO> ongoingEvents = eventService.getOngoingEvents(city,PageRequest.of(page, size));
         return ResponseEntity.ok(ongoingEvents);
     }
 
@@ -125,8 +128,10 @@ public class EventController {
     @GetMapping("/upcoming")
     public ResponseEntity<Page<EventDTO>> getUpcomingEvents(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
-        Page<EventDTO> upcomingEvents = eventService.getUpcomingEvents(PageRequest.of(page, size));
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) String city
+            ) {
+        Page<EventDTO> upcomingEvents = eventService.getUpcomingEvents(city,PageRequest.of(page, size));
         return ResponseEntity.ok(upcomingEvents);
     }
 
@@ -134,6 +139,11 @@ public class EventController {
     public ResponseEntity<Event> getEventById(@PathVariable Long id) {
         Event event = eventService.getEventById(id);
         return new ResponseEntity<>(event, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-event-by-userId/{userId}")
+    public List<EventDTO> getEventsByUserId(@PathVariable Long userId) {
+        return eventService.getEventsByUserId(userId);
     }
 
     @PostMapping("/create-event")
